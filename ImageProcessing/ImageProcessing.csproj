@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NonogramGrid.cs" />
     <Compile Include="ImageProcessor.cs" />
     <Compile Include="Models\ProcessingArgs.cs" />
     <Compile Include="Models\ProgressResult.cs" />
