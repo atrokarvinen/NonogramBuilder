@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{9E8C672A-36A9-4612-BE99-9A16DC1C843F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ShadowsHelper</RootNamespace>
-    <AssemblyName>ShadowsHelper</AssemblyName>
+    <RootNamespace>NonogramBuilder</RootNamespace>
+    <AssemblyName>NonogramBuilder</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -46,11 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ShadowsHelperUI.cs">
+    <Compile Include="NonogramUI.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ShadowsHelperUI.Designer.cs">
-      <DependentUpon>ShadowsHelperUI.cs</DependentUpon>
+    <Compile Include="NonogramUI.Designer.cs">
+      <DependentUpon>NonogramUI.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,9 +62,10 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="ShadowsHelperUI.resx">
-      <DependentUpon>ShadowsHelperUI.cs</DependentUpon>
+    <EmbeddedResource Include="NonogramUI.resx">
+      <DependentUpon>NonogramUI.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -86,7 +87,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Samples\TestOriginal.jpg">
+    <Content Include="Samples\Dragon0.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\Dragon1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\Dragon2.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\Dragon3.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\Lion0.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\Panda.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

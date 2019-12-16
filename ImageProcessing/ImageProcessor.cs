@@ -1,40 +1,25 @@
-﻿using AForge;
-using AForge.Imaging;
+﻿using AForge.Imaging;
 using AForge.Imaging.Filters;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Threading.Tasks;
-
-//TODO
-
-/*
-
-    Buttons:
-    Load image dialog
-    Save
-    Colour to grayscale
-
-    Two pictureboxes:
-    Left image: Original image
-    - Label: Original image
-    Right image: Result image
-    - Label: Shadow image
-
-    Input: amount of shadow levels
-
-    Load a default original image and result image
-
-    Error logging in UI. Inside multiline textbox. Label: process information.
-    Processingbar in UI. Label: processing progress %. Visible only when processing.
-
- */
 
 namespace ImageProcessing
 {
     public class ImageProcessor
     {
+        private Bitmap ConvertPixelFormat(Bitmap image, System.Drawing.Imaging.PixelFormat newFormat)
+        {
+            Bitmap clone = new Bitmap(image.Width, image.Height, newFormat);
+
+            using (Graphics gr = Graphics.FromImage(clone))
+            {
+                gr.DrawImage(image, new Rectangle(0, 0, clone.Width, clone.Height));
+            }
+
+            return clone;
+        }
+
         public Bitmap ToGrayscale(Bitmap image)
         {
             Grayscale gs = new Grayscale(1.0 / 3, 1.0 / 3, 1.0 / 3);
@@ -52,23 +37,7 @@ namespace ImageProcessing
             Subtract s = new Subtract(tMaxImage);
             Bitmap tImage = s.Apply(tMinImage);
 
-            //tMinImage.Save(@"C:\Users\karviatr\Pictures\tMin.bmp", ImageFormat.Bmp);
-            //tMaxImage.Save(@"C:\Users\karviatr\Pictures\tMax.bmp", ImageFormat.Bmp);
-            //tImage.Save(@"C:\Users\karviatr\Pictures\tImage.bmp", ImageFormat.Bmp);
-
             return tImage;
-        }
-
-        private Blob[] GetBlobs(Bitmap image)
-        {
-            BlobCounterBase bc = new BlobCounter()
-            {
-                FilterBlobs = true,
-                MinWidth = 1,
-                MinHeight= 1,
-            };
-            bc.ProcessImage(image);
-            return bc.GetObjectsInformation();
         }
 
         private void SetPixels(Bitmap image, Bitmap tImage, Color color, Blob blob)
@@ -88,6 +57,12 @@ namespace ImageProcessing
             }
         }
 
+        private Bitmap ChangeResolution(Bitmap image, int width, int height)
+        {
+            ResizeNearestNeighbor rnn = new ResizeNearestNeighbor(width, height);
+            return rnn.Apply(image);
+        }
+
         public async Task<Result> ProcessAsync(ProcessingArgs args, IProgress<ProgressResult> progress)
         {
             ProgressResult progressResult = new ProgressResult();
@@ -95,35 +70,39 @@ namespace ImageProcessing
             Report(progress, progressResult);
 
             Bitmap image = args.Image;
-            Bitmap grayImage = await Task.Run(() => ToGrayscale(image));
-
-            Report(progress, progressResult);
-
-            int progressCount = 10;
-            int phaseProgressMax = 80;
-            int progressStepIncrement = (int)Math.Floor(1.0 / args.ShadowLevels * phaseProgressMax);
-            Bitmap result = new Bitmap(image.Width, image.Height, PixelFormat.Format32bppArgb);
-            for (int i = 0; i < args.ShadowLevels; i++)
+            if (image.PixelFormat != System.Drawing.Imaging.PixelFormat.Format32bppArgb)
             {
-                int thresholdMin = i * 255 / args.ShadowLevels;
-                int thresholdMax = Math.Min((i + 1) * 255 / args.ShadowLevels, 255);
-                Bitmap tImage = await Task.Run(() => Threshold(grayImage, thresholdMin, thresholdMax));
-
-                int grayVal = 255 - thresholdMin;
-                Color c = Color.FromArgb(grayVal, 0, 0, 0);
-
-                Blob[] blobs = GetBlobs(tImage);
-                for (int j = 0; j < blobs.Length; j++)
-                {
-                    SetPixels(result, tImage, c, blobs[j]);
-                }
-
-                progressCount += progressStepIncrement;
-                progressResult.ProgressCount = progressCount;
-                Report(progress, progressResult);
+                Bitmap convertedImage = ConvertPixelFormat(image, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                image = convertedImage;
             }
 
-            Bitmap resultImage = result;
+            Bitmap grayImage = await Task.Run(() => ToGrayscale(image));
+
+            progressResult.ProgressCount = 10;
+            Report(progress, progressResult);
+
+            int tMin = args.Thresholds[0];
+            int tMax = args.Thresholds[1];
+
+            Bitmap thresholdImage = Threshold(grayImage, tMin, tMax);
+
+            progressResult.ProgressCount = 20;
+            Report(progress, progressResult);
+
+            int rows = 40;
+            int cols = 40;
+            Size size = thresholdImage.Size;
+            double aspect = 1.0 * size.Width / size.Height;
+            int newWidth = (int)(cols * aspect);
+            int newHeight = rows;
+
+            Bitmap lowResImage = ChangeResolution(thresholdImage, newWidth, newHeight);
+
+            progressResult.ProgressCount = 30;
+            Report(progress, progressResult);
+
+            Bitmap resultImage = ChangeResolution(lowResImage, size.Width, size.Height);
+
             Result r = new Result()
             {
                 GrayImage = grayImage,

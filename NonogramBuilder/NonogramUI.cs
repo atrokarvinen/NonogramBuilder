@@ -1,6 +1,5 @@
 ﻿using ImageProcessing;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -8,27 +7,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ShadowsHelper
+namespace NonogramBuilder
 {
-    public partial class ShadowsHelperUI : Form
+    public partial class NonogramUI : Form
     {
         private int _ScreenWidth;
         private int _ScreenHeight;
         private Bitmap _OriginalImage;
         private readonly ImageProcessor _ImageProcessor;
 
-        public ShadowsHelperUI()
+        public NonogramUI()
         {
             InitializeComponent();
 
             Rectangle resolution = Screen.PrimaryScreen.Bounds;
-            //Rectangle resolution = new Rectangle(0, 0, 1000, 1000);
             ClientSize = new Size(resolution.Width - 100, resolution.Height - 100);
 
             _ImageProcessor = new ImageProcessor();
 
-            _OriginalImage = (Bitmap)Image.FromFile(@"Samples\TestOriginal.jpg");
+            _OriginalImage = (Bitmap)Image.FromFile(@"Samples\Dragon2.jpg");
             OriginalPB.Image = _OriginalImage;
+
+            //Bitmap shadowImage = (Bitmap)Image.FromFile(@"Samples\Test_Shadows.png");
+            //ResultPB.Image = shadowImage;
         }
 
         private void InitializeMainScreen()
@@ -51,12 +52,12 @@ namespace ShadowsHelper
             // OriginalImageLabel
             OriginalImageLabel.Location = Prcnt2PxLoc(2, 1);
             OriginalImageLabel.Size = new Size(97, 13);
-            OriginalImageLabel.Text = "OriginalImageLabel";
+            OriginalImageLabel.Text = "Original image";
 
             // ResultImageLabel
             ResultImageLabel.Location = Prcnt2PxLoc(51, 1);
             ResultImageLabel.Size = new Size(92, 13);
-            ResultImageLabel.Text = "ResultImageLabel";
+            ResultImageLabel.Text = "Shadow image";
 
             // LoadImageButton
             LoadImageButton.Location = Prcnt2PxLoc(2, 85);
@@ -73,15 +74,23 @@ namespace ShadowsHelper
             SaveImageButton.Size = Prcnt2PxSize(5, 5);
             SaveImageButton.Text = "Save image";
 
-            // ShadowLevelsLabel
-            ShadowLevelsLabel.Location = Prcnt2PxLoc(26, 87);
-            ShadowLevelsLabel.Size = new Size(76, 20);
-            ShadowLevelsLabel.Text = "Shadow levels";
+            // ThresholdMinLabel
+            ThresholdMinLabel.Location = Prcnt2PxLoc(26, 87);
+            ThresholdMinLabel.Size = new Size(76, 20);
 
-            // ShadowLevelsInput
-            ShadowLevelsInput.Location = Prcnt2PxLoc(31, 87);
-            ShadowLevelsInput.Size = new Size(100, 20);
-            ShadowLevelsInput.Text = "5";
+            // ThresholdMinInput
+            ThresholdMinInput.Location = Prcnt2PxLoc(32, 87);
+            ThresholdMinInput.Size = new Size(100, 20);
+            ThresholdMinInput.Text = "100";
+
+            // ThresholdMaxLabel
+            ThresholdMaxLabel.Location = Prcnt2PxLoc(40, 87);
+            ThresholdMaxLabel.Size = new Size(76, 20);
+
+            // ThresholdMaxInput
+            ThresholdMaxInput.Location = Prcnt2PxLoc(46, 87);
+            ThresholdMaxInput.Size = new Size(100, 20);
+            ThresholdMaxInput.Text = "255";
 
             // ProgressBarLabel
             ProgressBarLabel.Location = Prcnt2PxLoc(48, 90);
@@ -115,22 +124,23 @@ namespace ShadowsHelper
         {
             Progress<ProgressResult> progressIndicator = new Progress<ProgressResult>(ReportProgress);
 
-            int shadowLevels;
-            if (!int.TryParse(ShadowLevelsInput.Text, out shadowLevels))
+            int[] thresholds = new int[2];
+            if (!(int.TryParse(ThresholdMinInput.Text, out thresholds[0]) && 
+                int.TryParse(ThresholdMaxInput.Text, out thresholds[1])))
             {
-                MessageBox.Show($"Cannot convert '{ShadowLevelsInput.Text}' to Int32");
+                MessageBox.Show($"Cannot convert '{ThresholdMinInput.Text}' to Int32");
                 return;
             }
-            if (!(0 < shadowLevels && shadowLevels < 256))
+            if (!((0 <= thresholds[0] && thresholds[0] < 256) && (0 <= thresholds[1] && thresholds[1] < 256)))
             {
-                MessageBox.Show($"Shadow level range is [1, 255]");
+                MessageBox.Show($"Threshold level range is [0, 255]");
                 return;
             }
 
             ProcessingArgs args = new ProcessingArgs()
             {
                 Image = _OriginalImage,
-                ShadowLevels = shadowLevels,
+                Thresholds = thresholds,
             };
             Task<Result> processingTask = _ImageProcessor.ProcessAsync(args, progressIndicator);
 
@@ -159,7 +169,7 @@ namespace ShadowsHelper
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.InitialDirectory = "C:\\";
+                //openFileDialog.InitialDirectory = "C:\\";
                 openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.tiff, *.png, *.bmp) | *.jpg; *.jpeg; *.tiff; *.png; *.bmp";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;

@@ -1,6 +1,6 @@
-﻿namespace ShadowsHelper
+﻿namespace NonogramBuilder
 {
-    partial class ShadowsHelperUI
+    partial class NonogramUI
     {
         /// <summary>
         /// Required designer variable.
@@ -35,10 +35,12 @@
             this.LoadImageButton = new System.Windows.Forms.Button();
             this.SaveImageButton = new System.Windows.Forms.Button();
             this.ComputeButton = new System.Windows.Forms.Button();
-            this.ShadowLevelsInput = new System.Windows.Forms.TextBox();
-            this.ShadowLevelsLabel = new System.Windows.Forms.Label();
+            this.ThresholdMinInput = new System.Windows.Forms.TextBox();
+            this.ThresholdMinLabel = new System.Windows.Forms.Label();
             this.ProgressBar = new System.Windows.Forms.ProgressBar();
             this.ProgressBarLabel = new System.Windows.Forms.Label();
+            this.ThresholdMaxLabel = new System.Windows.Forms.Label();
+            this.ThresholdMaxInput = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.OriginalPB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ResultPB)).BeginInit();
             this.SuspendLayout();
@@ -107,21 +109,21 @@
             this.ComputeButton.UseVisualStyleBackColor = true;
             this.ComputeButton.Click += new System.EventHandler(this.ComputeButton_Click);
             // 
-            // ShadowLevelsInput
+            // ThresholdMinInput
             // 
-            this.ShadowLevelsInput.Location = new System.Drawing.Point(322, 378);
-            this.ShadowLevelsInput.Name = "ShadowLevelsInput";
-            this.ShadowLevelsInput.Size = new System.Drawing.Size(100, 20);
-            this.ShadowLevelsInput.TabIndex = 6;
+            this.ThresholdMinInput.Location = new System.Drawing.Point(322, 378);
+            this.ThresholdMinInput.Name = "ThresholdMinInput";
+            this.ThresholdMinInput.Size = new System.Drawing.Size(100, 20);
+            this.ThresholdMinInput.TabIndex = 6;
             // 
-            // ShadowLevelsLabel
+            // ThresholdMinLabel
             // 
-            this.ShadowLevelsLabel.AutoSize = true;
-            this.ShadowLevelsLabel.Location = new System.Drawing.Point(240, 381);
-            this.ShadowLevelsLabel.Name = "ShadowLevelsLabel";
-            this.ShadowLevelsLabel.Size = new System.Drawing.Size(76, 13);
-            this.ShadowLevelsLabel.TabIndex = 7;
-            this.ShadowLevelsLabel.Text = "Shadow levels";
+            this.ThresholdMinLabel.AutoSize = true;
+            this.ThresholdMinLabel.Location = new System.Drawing.Point(240, 381);
+            this.ThresholdMinLabel.Name = "ThresholdMinLabel";
+            this.ThresholdMinLabel.Size = new System.Drawing.Size(74, 13);
+            this.ThresholdMinLabel.TabIndex = 7;
+            this.ThresholdMinLabel.Text = "Threshold Min";
             // 
             // ProgressBar
             // 
@@ -139,15 +141,33 @@
             this.ProgressBarLabel.TabIndex = 9;
             this.ProgressBarLabel.Text = "ProgressBarLabel";
             // 
-            // ShadowsHelperUI
+            // ThresholdMaxLabel
+            // 
+            this.ThresholdMaxLabel.AutoSize = true;
+            this.ThresholdMaxLabel.Location = new System.Drawing.Point(445, 381);
+            this.ThresholdMaxLabel.Name = "ThresholdMaxLabel";
+            this.ThresholdMaxLabel.Size = new System.Drawing.Size(77, 13);
+            this.ThresholdMaxLabel.TabIndex = 11;
+            this.ThresholdMaxLabel.Text = "Threshold Max";
+            // 
+            // ThresholdMaxInput
+            // 
+            this.ThresholdMaxInput.Location = new System.Drawing.Point(527, 378);
+            this.ThresholdMaxInput.Name = "ThresholdMaxInput";
+            this.ThresholdMaxInput.Size = new System.Drawing.Size(100, 20);
+            this.ThresholdMaxInput.TabIndex = 10;
+            // 
+            // NonogramUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ThresholdMaxLabel);
+            this.Controls.Add(this.ThresholdMaxInput);
             this.Controls.Add(this.ProgressBarLabel);
             this.Controls.Add(this.ProgressBar);
-            this.Controls.Add(this.ShadowLevelsLabel);
-            this.Controls.Add(this.ShadowLevelsInput);
+            this.Controls.Add(this.ThresholdMinLabel);
+            this.Controls.Add(this.ThresholdMinInput);
             this.Controls.Add(this.ComputeButton);
             this.Controls.Add(this.SaveImageButton);
             this.Controls.Add(this.LoadImageButton);
@@ -155,8 +175,8 @@
             this.Controls.Add(this.OriginalImageLabel);
             this.Controls.Add(this.ResultPB);
             this.Controls.Add(this.OriginalPB);
-            this.Name = "ShadowsHelperUI";
-            this.Text = "Shadows helper";
+            this.Name = "NonogramUI";
+            this.Text = "Nonogram builder";
             this.Resize += new System.EventHandler(this.ShadowsHelperUI_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.OriginalPB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ResultPB)).EndInit();
@@ -174,10 +194,12 @@
         private System.Windows.Forms.Button LoadImageButton;
         private System.Windows.Forms.Button SaveImageButton;
         private System.Windows.Forms.Button ComputeButton;
-        private System.Windows.Forms.TextBox ShadowLevelsInput;
-        private System.Windows.Forms.Label ShadowLevelsLabel;
+        private System.Windows.Forms.TextBox ThresholdMinInput;
+        private System.Windows.Forms.Label ThresholdMinLabel;
         private System.Windows.Forms.ProgressBar ProgressBar;
         private System.Windows.Forms.Label ProgressBarLabel;
+        private System.Windows.Forms.Label ThresholdMaxLabel;
+        private System.Windows.Forms.TextBox ThresholdMaxInput;
     }
 }
 

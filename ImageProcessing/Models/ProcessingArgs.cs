@@ -5,7 +5,6 @@ namespace ImageProcessing
     public class ProcessingArgs
     {
         public Bitmap Image { get; set; }
-        public int ShadowLevels { get; set; }
-
+        public int[] Thresholds { get; set; }
     }
 }
