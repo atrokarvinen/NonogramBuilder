@@ -6,5 +6,6 @@ namespace ImageProcessing
     {
         public Bitmap Image { get; set; }
         public int[] Thresholds { get; set; }
+        public int ColumnCount { get; set; }
     }
 }

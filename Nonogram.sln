@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageProcessing", "ImagePro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NonogramBuilder", "NonogramBuilder\NonogramBuilder.csproj", "{9E8C672A-36A9-4612-BE99-9A16DC1C843F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nonogram", "Nonogram\Nonogram.csproj", "{F4A50A5A-3036-44B1-9FD8-A4894DD5E758}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9E8C672A-36A9-4612-BE99-9A16DC1C843F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E8C672A-36A9-4612-BE99-9A16DC1C843F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E8C672A-36A9-4612-BE99-9A16DC1C843F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4A50A5A-3036-44B1-9FD8-A4894DD5E758}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4A50A5A-3036-44B1-9FD8-A4894DD5E758}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4A50A5A-3036-44B1-9FD8-A4894DD5E758}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4A50A5A-3036-44B1-9FD8-A4894DD5E758}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

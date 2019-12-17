@@ -41,6 +41,8 @@
             this.ProgressBarLabel = new System.Windows.Forms.Label();
             this.ThresholdMaxLabel = new System.Windows.Forms.Label();
             this.ThresholdMaxInput = new System.Windows.Forms.TextBox();
+            this.ColumnCountLabel = new System.Windows.Forms.Label();
+            this.ColumnCountInput = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.OriginalPB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ResultPB)).BeginInit();
             this.SuspendLayout();
@@ -144,7 +146,7 @@
             // ThresholdMaxLabel
             // 
             this.ThresholdMaxLabel.AutoSize = true;
-            this.ThresholdMaxLabel.Location = new System.Drawing.Point(445, 381);
+            this.ThresholdMaxLabel.Location = new System.Drawing.Point(444, 381);
             this.ThresholdMaxLabel.Name = "ThresholdMaxLabel";
             this.ThresholdMaxLabel.Size = new System.Drawing.Size(77, 13);
             this.ThresholdMaxLabel.TabIndex = 11;
@@ -152,16 +154,34 @@
             // 
             // ThresholdMaxInput
             // 
-            this.ThresholdMaxInput.Location = new System.Drawing.Point(527, 378);
+            this.ThresholdMaxInput.Location = new System.Drawing.Point(526, 378);
             this.ThresholdMaxInput.Name = "ThresholdMaxInput";
             this.ThresholdMaxInput.Size = new System.Drawing.Size(100, 20);
             this.ThresholdMaxInput.TabIndex = 10;
+            // 
+            // ColumnCountLabel
+            // 
+            this.ColumnCountLabel.AutoSize = true;
+            this.ColumnCountLabel.Location = new System.Drawing.Point(640, 381);
+            this.ColumnCountLabel.Name = "ColumnCountLabel";
+            this.ColumnCountLabel.Size = new System.Drawing.Size(47, 13);
+            this.ColumnCountLabel.TabIndex = 13;
+            this.ColumnCountLabel.Text = "Columns";
+            // 
+            // ColumnCountInput
+            // 
+            this.ColumnCountInput.Location = new System.Drawing.Point(722, 378);
+            this.ColumnCountInput.Name = "ColumnCountInput";
+            this.ColumnCountInput.Size = new System.Drawing.Size(100, 20);
+            this.ColumnCountInput.TabIndex = 12;
             // 
             // NonogramUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(917, 450);
+            this.Controls.Add(this.ColumnCountLabel);
+            this.Controls.Add(this.ColumnCountInput);
             this.Controls.Add(this.ThresholdMaxLabel);
             this.Controls.Add(this.ThresholdMaxInput);
             this.Controls.Add(this.ProgressBarLabel);
@@ -200,6 +220,8 @@
         private System.Windows.Forms.Label ProgressBarLabel;
         private System.Windows.Forms.Label ThresholdMaxLabel;
         private System.Windows.Forms.TextBox ThresholdMaxInput;
+        private System.Windows.Forms.Label ColumnCountLabel;
+        private System.Windows.Forms.TextBox ColumnCountInput;
     }
 }
 

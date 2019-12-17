@@ -1,4 +1,5 @@
 ﻿using ImageProcessing;
+using Nonogram;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -14,6 +15,7 @@ namespace NonogramBuilder
         private int _ScreenWidth;
         private int _ScreenHeight;
         private Bitmap _OriginalImage;
+        private Bitmap _NonogramClueImage;
         private readonly ImageProcessor _ImageProcessor;
 
         public NonogramUI()
@@ -28,8 +30,8 @@ namespace NonogramBuilder
             _OriginalImage = (Bitmap)Image.FromFile(@"Samples\Dragon2.jpg");
             OriginalPB.Image = _OriginalImage;
 
-            //Bitmap shadowImage = (Bitmap)Image.FromFile(@"Samples\Test_Shadows.png");
-            //ResultPB.Image = shadowImage;
+            Bitmap solutionImage = (Bitmap)Image.FromFile(@"Samples\Dragon2_Solution.png");
+            ResultPB.Image = solutionImage;
         }
 
         private void InitializeMainScreen()
@@ -92,6 +94,16 @@ namespace NonogramBuilder
             ThresholdMaxInput.Size = new Size(100, 20);
             ThresholdMaxInput.Text = "255";
 
+            // ColumnCountLabel
+            ColumnCountLabel.Location = Prcnt2PxLoc(54, 87);
+            ColumnCountLabel.Size = new Size(47, 13);
+            ColumnCountLabel.Text = "Columns";
+            
+            // ColumnCountInput
+            ColumnCountInput.Location = Prcnt2PxLoc(60, 87);
+            ColumnCountInput.Size = new Size(100, 20);
+            ColumnCountInput.Text = "30";
+
             // ProgressBarLabel
             ProgressBarLabel.Location = Prcnt2PxLoc(48, 90);
             ProgressBarLabel.Size = new Size(90, 13);
@@ -125,15 +137,12 @@ namespace NonogramBuilder
             Progress<ProgressResult> progressIndicator = new Progress<ProgressResult>(ReportProgress);
 
             int[] thresholds = new int[2];
-            if (!(int.TryParse(ThresholdMinInput.Text, out thresholds[0]) && 
-                int.TryParse(ThresholdMaxInput.Text, out thresholds[1])))
+            int columnCount;
+
+            if (!(TryParseString(ThresholdMinInput.Text, out thresholds[0]) &&
+                TryParseString(ThresholdMaxInput.Text, out thresholds[1]) &&
+                TryParseString(ColumnCountInput.Text, out columnCount)))
             {
-                MessageBox.Show($"Cannot convert '{ThresholdMinInput.Text}' to Int32");
-                return;
-            }
-            if (!((0 <= thresholds[0] && thresholds[0] < 256) && (0 <= thresholds[1] && thresholds[1] < 256)))
-            {
-                MessageBox.Show($"Threshold level range is [0, 255]");
                 return;
             }
 
@@ -141,14 +150,22 @@ namespace NonogramBuilder
             {
                 Image = _OriginalImage,
                 Thresholds = thresholds,
+                ColumnCount = columnCount
             };
             Task<Result> processingTask = _ImageProcessor.ProcessAsync(args, progressIndicator);
 
-
             Result processingResult = await processingTask;
 
+            Bitmap lowResImage = processingResult.ResultImage;
+            NonogramGrid ng = new NonogramGrid();
+            NonogramGrid blackCoordinates = ng.GetBoardCells(lowResImage);
+
+            _NonogramClueImage?.Dispose();
+            _NonogramClueImage = ng.NonogramFromImage(_OriginalImage.Size, lowResImage.Size, blackCoordinates, false);
+            Bitmap nonogramSolvedImage = ng.NonogramFromImage(_OriginalImage.Size, lowResImage.Size, blackCoordinates, true);
+
             PictureBoxSetImage(OriginalPB, processingResult.GrayImage);
-            PictureBoxSetImage(ResultPB, processingResult.ResultImage);
+            PictureBoxSetImage(ResultPB, nonogramSolvedImage);
         }
 
         void ReportProgress(ProgressResult value)
@@ -169,7 +186,6 @@ namespace NonogramBuilder
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                //openFileDialog.InitialDirectory = "C:\\";
                 openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.tiff, *.png, *.bmp) | *.jpg; *.jpeg; *.tiff; *.png; *.bmp";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
@@ -196,28 +212,35 @@ namespace NonogramBuilder
             if (saveFileDialog.FileName != "")
             {
                 // Saves the Image via a FileStream created by the OpenFile method.
-                System.IO.FileStream fs = (System.IO.FileStream)saveFileDialog.OpenFile();
-
-                // Saves the Image in the appropriate ImageFormat based upon the
-                // File type selected in the dialog box.
-                // NOTE that the FilterIndex property is one-based.
-
-                //ResultPB.Image.Save(@"C:\Users\karviatr\Pictures\test.bmp", ImageFormat.Bmp);
-                //ResultPB.Image.Save(@"C:\Users\karviatr\Pictures\test.jpg", ImageFormat.Jpeg);
-                //ResultPB.Image.Save(@"C:\Users\karviatr\Pictures\test.png", ImageFormat.Png);
+                FileStream fs = (FileStream)saveFileDialog.OpenFile();
 
                 string fullFileName = saveFileDialog.FileName;
                 string imageDirName = Path.GetDirectoryName(fullFileName);
                 string imageFileName = Path.GetFileName(fullFileName);
                 string imageName = imageFileName.Split('.').First();
-                string grayFileName = Path.Combine(imageDirName, imageName + "_Gray.png");
-                string resultFileName = Path.Combine(imageDirName, imageName + "_Shadows.png");
+                string clueFile = Path.Combine(imageDirName, imageName + "_NonogramClues.png");
+                string solutionName = Path.Combine(imageDirName, imageName + "_Solution.png");
 
-                OriginalPB.Image.Save(grayFileName, ImageFormat.Png);
-                ResultPB.Image.Save(resultFileName, ImageFormat.Png);
+                _NonogramClueImage?.Save(clueFile, ImageFormat.Png);
+                ResultPB.Image.Save(solutionName, ImageFormat.Png);
 
                 fs.Close();
             }
+        }
+
+        private bool TryParseString<T>(string text, out T retValue)
+        {
+            try
+            {
+                retValue = (T)Convert.ChangeType(text, typeof(T));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Cannot convert '{text}' to type {typeof(T)}");
+            }
+            retValue = default;
+            return false;
         }
     }
 }

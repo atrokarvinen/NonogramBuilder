@@ -85,8 +85,15 @@
       <Project>{D3851ECD-07AA-440A-912C-B54345F96AA2}</Project>
       <Name>ImageProcessing</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Nonogram\Nonogram.csproj">
+      <Project>{F4A50A5A-3036-44B1-9FD8-A4894DD5E758}</Project>
+      <Name>Nonogram</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Samples\Dragon2_Solution.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Samples\Dragon0.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -99,10 +106,13 @@
     <Content Include="Samples\Dragon3.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Samples\Lion0.jpg">
+    <Content Include="Samples\Eagle0.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Samples\Panda.jpg">
+    <Content Include="Samples\Lion1.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Samples\Lion2.JPG">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
